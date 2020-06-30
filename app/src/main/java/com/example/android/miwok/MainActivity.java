@@ -18,11 +18,28 @@ package com.example.android.miwok;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
+/* slide with view pager+ fragmnt adapter
+Step 1.declare view pager in xml
+step 2.make a custom FragmentPagerAdapter by extending this class
+       a) override getitem and getcount mehods
+       b)declare constructor by super
+Step 3. make a object of viewpager tht contains viewpager xml id
+Step4.make object of custom adapter and pass getSupportFragmentManager() in constructor,
+           setAdapter with the help of view pager.
+
+*/
 public class MainActivity extends AppCompatActivity {
+    private TabLayout tabLayout;
+    private TabItem nums,fam,colors,phrase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,53 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
+         tabLayout=(TabLayout) findViewById(R.id.slide_tab);
+            nums=(TabItem) findViewById(R.id.tab_nums);
+            fam=(TabItem) findViewById(R.id.tab_fam);
+            colors=(TabItem) findViewById(R.id.tab_col);
+            phrase=(TabItem)findViewById(R.id.tab_phrse);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        CategoryAdapter adapter=new CategoryAdapter(getSupportFragmentManager());
 
-        //Find the View to show number category
-        TextView numbers =(TextView) findViewById(R.id.numbers);
-        //set a clicklistener on that view
-        numbers.setOnClickListener(new View.OnClickListener() {
-            // The code in this method will be executed when the numbers View is clicked on.
-            @Override
-            public void onClick(View view) {
-                Intent numbersIntent = new Intent(MainActivity.this, NumbersActivity.class);
-                startActivity(numbersIntent);
-            }
-    });
-
-        TextView family=(TextView) findViewById(R.id.family);
-        family.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//setOnClickListener()    Register a callback to be invoked when this view is clicked.
-                Intent i = new Intent(MainActivity.this,FamilyActivity.class);
-                startActivity(i);
-            }
-        });
-
-        TextView colors=(TextView) findViewById(R.id.colors);
-        colors.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,ColorsActivity.class);
-                startActivity(i);
-            }
-        });
-        TextView phrases=(TextView) findViewById(R.id.phrases);
-        phrases.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                Intent i=new Intent(MainActivity.this,PhraseActivity.class);
-                startActivity(i);
-            }
-        });
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
     }
-
-//    public void onNumbersActivity(View view){
-//        Intent i = new Intent(this,NumbersActivity.class);
-//        //two arg are passed in constructor one foe when we click where to go
-//        //this refers to the pacakage we were in
-//        startActivity(i);
-//    }
-
-    }
+}
